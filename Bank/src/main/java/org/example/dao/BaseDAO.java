@@ -1,5 +1,4 @@
 package org.example.dao;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,14 +10,12 @@ public abstract class BaseDAO<T> {
     protected PreparedStatement statement;
     protected String request;
     protected ResultSet resultSet;
-
     protected BaseDAO(Connection connection){
         _connection = connection;
     }
-
     public abstract boolean save(T element) throws SQLException;
-    public abstract boolean update(T element);
-    public abstract boolean delete(T element);
-    public abstract T get(int id);
-    public abstract List<T> getAll();
+    public abstract boolean update(T element) throws SQLException;
+    public abstract boolean delete(T element) throws SQLException;
+    public abstract T get(int id) throws SQLException;
+    public abstract List<T> getAll() throws SQLException;
 }

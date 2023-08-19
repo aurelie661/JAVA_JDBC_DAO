@@ -2,7 +2,7 @@
 
 
 ----***Exercices***----
-[**BANK**](https://github.com/aurelie661/JDBC/tree/main/JDBC1)
+[**BANK**](https://github.com/aurelie661/JAVA_JDBC_DAO/tree/main/Bank/src/main/java/org/example)
 
 
 

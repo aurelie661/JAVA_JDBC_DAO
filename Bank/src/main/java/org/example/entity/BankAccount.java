@@ -11,6 +11,13 @@ public class BankAccount {
         this.customer = customer;
     }
 
+    public BankAccount() {
+    }
+
+    public BankAccount(double balance) {
+        this.balance = balance;
+    }
+
     public long getId() {
         return id;
     }

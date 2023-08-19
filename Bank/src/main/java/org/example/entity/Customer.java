@@ -1,17 +1,19 @@
 package org.example.entity;
 
-public class Customer {
+public class Customer extends BankAccount{
     private long id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     public Customer(int id, String firstName, String lastName, String phoneNumber) {
+        super(0.0);
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
     }
     public Customer(String firstName, String lastName, String phoneNumber) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

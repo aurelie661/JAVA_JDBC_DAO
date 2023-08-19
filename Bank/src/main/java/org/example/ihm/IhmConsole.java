@@ -9,7 +9,7 @@ public class IhmConsole {
     public static void start() {
         boolean running = true;
         while (running) {
-            System.out.println("\t\t###  IHM Console  ###");
+            System.out.println("\t\t### Bank IHM Console ###");
             System.out.println("\t\t1. Ajouter un client");
             System.out.println("\t\t2. Modifier un client");
             System.out.println("\t\t3. Supprimer un client");
@@ -27,6 +27,7 @@ public class IhmConsole {
                 case 1 -> AddCustomer();
                 case 2 -> updateCustomer();
                 case 3 -> deleteCustomer();
+                case 4 -> doDeposit();
                 case 7 -> running = false;
                 default -> System.out.println("Choix invalide !");
             }
@@ -95,5 +96,9 @@ public class IhmConsole {
         }else{
             System.out.println("Aucun client trouvé pour cet id!");
         }
+    }
+
+    private  static  void doDeposit(){
+
     }
 }

@@ -1,56 +1,52 @@
 package org.example.entity;
 
 public class Operation {
-    private long accountNumber;
+    private int id;
     private double amount;
-    private OperationStatus operationStatus;
-    private BankAccount bankAccount;
+    private OperationStatus status;
 
-    public Operation(long accountNumber, double amount, OperationStatus operationStatus) {
-        this.accountNumber = accountNumber;
-        this.amount = amount;
-        this.operationStatus = operationStatus;
+    private int accountId;
+
+    public int getAccountId() {
+        return accountId;
     }
 
-    public long getAccountNumber() {
-        return accountNumber;
+    public int getId() {
+        return id;
     }
 
-    public void setAccountNumber(long accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public OperationStatus getStatus() {
+        return status;
+    }
+
+    public Operation(double amount, int accountId) {
         this.amount = amount;
+        this.accountId = accountId;
+        this.status = (this.amount >= 0) ? OperationStatus.DEPOSIT : OperationStatus.WITHDRAWAL;
     }
 
-    public OperationStatus getOperationStatus() {
-        return operationStatus;
+    public Operation(int id, double amount, int accountId) {
+        this(amount, accountId);
+        this.id = id;
     }
 
-    public void setOperationStatus(OperationStatus operationStatus) {
-        this.operationStatus = operationStatus;
-    }
 
-    public BankAccount getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
-    }
 
     @Override
     public String toString() {
-        return "Operation => " +
-                "accountNumber = " + accountNumber +
-                ", amount = " + amount +
-                ", operationStatus = " + operationStatus +
-                ", bankAccount = " + bankAccount +
-                '.';
+        return "Operation{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", status=" + status +
+                ", accountId=" + accountId +
+                '}';
     }
 }

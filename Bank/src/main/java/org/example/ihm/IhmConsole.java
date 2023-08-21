@@ -1,104 +1,130 @@
 package org.example.ihm;
+import org.example.entity.BankAccount;
 import org.example.entity.Customer;
-import org.example.service.CustomerSERVICE;
+import org.example.entity.Operation;
+import org.example.service.BankAccountSERVICE;
+
 import java.util.Scanner;
 
 public class IhmConsole {
-    private static Scanner scanner = new Scanner(System.in);
-    private static CustomerSERVICE customerSERVICE = new CustomerSERVICE();
-    public static void start() {
-        boolean running = true;
-        while (running) {
-            System.out.println("\t\t### Bank IHM Console ###");
-            System.out.println("\t\t1. Ajouter un client");
-            System.out.println("\t\t2. Modifier un client");
-            System.out.println("\t\t3. Supprimer un client");
-            System.out.println("\t\t4. Effectuer un dépot");
-            System.out.println("\t\t5. Effectuer un retrait");
-            System.out.println("\t\t6. Afficher toutes les opérations d'un client");
-            System.out.println("\t\t7. Quitter");
-            System.out.println();
-            System.out.print("\t\tChoix : ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            System.out.println();
+    private Scanner scanner;
 
-            switch (choice) {
-                case 1 -> AddCustomer();
-                case 2 -> updateCustomer();
-                case 3 -> deleteCustomer();
-                case 4 -> doDeposit();
-                case 7 -> running = false;
-                default -> System.out.println("Choix invalide !");
+    private String choix;
+
+    private BankAccountSERVICE bankAccountSERVICE;
+
+    public IhmConsole() {
+        scanner = new Scanner(System.in);
+        bankAccountSERVICE = new BankAccountSERVICE();
+    }
+
+    public void start() {
+        System.out.println("Exercice : Programme Banque");
+        do {
+            menu();
+            choix = scanner.nextLine();
+            switch (choix) {
+                case "1" -> createAccountAction();
+                case "2" -> depositAction();
+                case "3" -> withDrawlAction();
+                case "4" -> getAccountOperations();
+                case "0" -> System.out.println("Aurevoir");
+                default -> System.out.println("choix invalide");
+
+            }
+        } while (!choix.equals("0"));
+
+    }
+
+    private void menu() {
+        System.out.println("=== Menu BANQUE ===");
+        System.out.println("1 - Création d'un client et un compte");
+        System.out.println("2 - Dépot");
+        System.out.println("3 - Retrait");
+        System.out.println("4 - Afficher les opérations d'un compte");
+        System.out.println("0 - Quitter");
+    }
+
+    public void createAccountAction() {
+        Customer customer = createCustomerAction();
+        if (customer != null) {
+            BankAccount bankAccount = bankAccountSERVICE.createAndSaveAccount(customer.getId());
+            if (bankAccount != null) {
+                System.out.println("Compte crée avec l'id " + bankAccount.getId());
             }
         }
-        System.out.println("Au revoir !");
     }
-    private static void AddCustomer(){
-        System.out.print("Nom du client : ");
-        String firstName = scanner.nextLine();
-        System.out.print("Prénom du client : ");
+
+    public void depositAction() {
+        System.out.println();
+        System.out.println("=== Faire un dépot sur un Compte ===");
+        System.out.println();
+        System.out.print("Merci de saisir l'id : ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        BankAccount bankAccount = bankAccountSERVICE.getAccountAction(id);
+        System.out.print("Merci de saisir le montant du dépôt : ");
+        double montant = scanner.nextDouble();
+        scanner.nextLine();
+        if (bankAccount != null) {
+            if (bankAccountSERVICE.makeOperationDeposit(montant, bankAccount.getId())) {
+                System.out.println("dépot réussi");
+            } else {
+                System.out.println("erreur");
+            }
+        }
+    }
+
+    public void withDrawlAction() {
+        System.out.println();
+        System.out.println("=== Faire un retrait sur un Compte ===");
+        System.out.println();
+        System.out.print("Merci de saisir l'id : ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        BankAccount bankAccount = bankAccountSERVICE.getAccountAction(id);
+        System.out.print("Merci de saisir le montant du dépôt : ");
+        double montant = scanner.nextDouble();
+        scanner.nextLine();
+        if (bankAccount != null) {
+            if (bankAccountSERVICE.makeOperationWithDraw(montant * -1, bankAccount.getId())) {
+                System.out.println("retrait réussi");
+            } else {
+                System.out.println("erreur");
+            }
+        }
+
+    }
+
+    private Customer createCustomerAction() {
+        System.out.println();
+        System.out.println("=== Création d'un Client ===");
+        System.out.println();
+        Customer customer = null;
+        System.out.print("Merci de saisir le nom : ");
         String lastName = scanner.nextLine();
-        System.out.print("Numéro de téléphone du client : ");
-        String phoneNumber = scanner.nextLine();
-        if(customerSERVICE.createCustomer(firstName,lastName,phoneNumber)){
-            System.out.println();
-            System.out.println("Client ajouté avec succés. ");
-            System.out.println();
-        }else{
-            System.out.println("Client non ajouté.");
-            System.out.println();
-        }
+        System.out.print("Merci de saisir le prénom : ");
+        String firstName = scanner.nextLine();
+        System.out.print("Merci de saisir le téléphone : ");
+        String phone = scanner.nextLine();
+        customer = bankAccountSERVICE.createAndSaveCustomer(firstName, lastName, phone);
+        return customer;
+
     }
-    private  static void updateCustomer(){
-        for (Customer c :
-                customerSERVICE.getAllCustomers()) {
-            System.out.println(c);
-            System.out.println();
-        }
-        System.out.print("Quel client voulez-vous modifier (Veuillez noter l'id du client):");
-        long idCustomer = scanner.nextLong();
+
+    public void getAccountOperations() {
+        System.out.println();
+        System.out.println("=== Voir toutes les opérations d'un Compte ===");
+        System.out.println();
+        System.out.print("Merci de saisir l'id : ");
+        int id = scanner.nextInt();
         scanner.nextLine();
-        if(customerSERVICE.getCustomerbyId(idCustomer) != null){
-            System.out.print("Nom du client : ");
-            String firstName = scanner.nextLine();
-            System.out.print("Prénom du client : ");
-            String lastName = scanner.nextLine();
-            System.out.print("Numéro de téléphone du client : ");
-            String phoneNumber = scanner.nextLine();
-            Customer customerFound = new Customer((int) idCustomer,firstName,lastName,phoneNumber);
-            if(customerSERVICE.updateCustomer(customerFound)){
-                System.out.println();
-                System.out.println("Le client a bien été modifié");
-                System.out.println();
-            }else{
-                System.out.println();
-                System.out.println("Le client n'a pas été modifié");
-                System.out.println();
+        BankAccount bankAccount = bankAccountSERVICE.getAccountAction(id);
+        if (bankAccount != null) {
+            for (Operation op : bankAccountSERVICE.getAllOpertionByIdAccount(bankAccount.getId())) {
+                System.out.println(op);
             }
-        }else {
-            System.out.println("Aucun client n'a cet id !");
+            System.out.println("solde compte actuelle :" + bankAccount.getTotalAmount());
         }
-    }
-    private static void deleteCustomer(){
-        for (Customer c :
-                customerSERVICE.getAllCustomers()) {
-            System.out.println(c);
-            System.out.println();
-        }
-        System.out.print("Quel client voulez-vous supprimer (Veuillez noter l'id du client):");
-        long idCustomer = scanner.nextLong();
-        scanner.nextLine();
-        if(customerSERVICE.getCustomerbyId(idCustomer) != null){
-            Customer customerFound = customerSERVICE.getCustomerbyId(idCustomer);
-            customerSERVICE.deleteCustomer(customerFound);
-            System.out.println("Client supprimer avec succés.");
-        }else{
-            System.out.println("Aucun client trouvé pour cet id!");
-        }
-    }
-
-    private  static  void doDeposit(){
-
     }
 }

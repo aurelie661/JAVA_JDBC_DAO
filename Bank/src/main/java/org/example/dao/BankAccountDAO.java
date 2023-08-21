@@ -2,6 +2,7 @@ package org.example.dao;
 
 import org.example.entity.BankAccount;
 import org.example.entity.Customer;
+import org.example.entity.Operation;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -54,12 +55,17 @@ public class BankAccountDAO extends BaseDAO<BankAccount> {
     @Override
     public BankAccount get(int id) throws SQLException {
         BankAccount bankAccount = null;
+        Customer customer = null;
+        Operation operation = null;
         request = "SELECT * FROM bank_account WHERE id = ?";
         statement = _connection.prepareStatement(request);
         statement.setInt(1, id);
         resultSet = statement.executeQuery();
         if(resultSet.next()){
-            bankAccount = new BankAccount(resultSet.getInt("id"));
+           /* bankAccount = new BankAccount(resultSet.getInt("id"),
+                                          resultSet.getDouble("balance"),
+                                          resultSet.getInt(3),
+                                          resultSet.getInt(4));*/
         }
         return bankAccount;
     }

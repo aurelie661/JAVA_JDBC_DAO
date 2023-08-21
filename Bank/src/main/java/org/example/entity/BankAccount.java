@@ -1,62 +1,75 @@
 package org.example.entity;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public class BankAccount {
-    private long id;
-    private double balance;
+    private int id;
+    private int customerId;
+
     private Customer customer;
-    private Operation operation;
 
-    public BankAccount(double balance, Customer customer) {
-        this.balance = balance;
-        this.customer = customer;
-    }
+    private List<Operation> operations;
 
-    public BankAccount() {
-    }
+    private double totalAmount;
 
-    public BankAccount(double balance) {
-        this.balance = balance;
-    }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public List<Operation> getOperations() {
+        return operations;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setId(int id) {
         this.id = id;
     }
 
-    public double getBalance() {
-        return balance;
+    public BankAccount(int customerId, double totalAmount) {
+        this.customerId = customerId;
+        this.totalAmount = totalAmount;
+        this.operations = new ArrayList<>();
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public BankAccount(int id, int customerId, double totalAmount) {
+        this(customerId, totalAmount);
+        this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public boolean makeDeposit(Operation operation) throws SQLException {
+        if(operation.getAmount() > 0) {
+            operations.add(operation);
+            totalAmount += operation.getAmount();
+            return true;
+        }
+        return false;
     }
-
-    public Operation getOperation() {
-        return operation;
-    }
-
-    public void setOperation(Operation operation) {
-        this.operation = operation;
+    public boolean makeWithDrawl(Operation operation) throws SQLException {
+        if(operation.getAmount() < 0 && getTotalAmount() >= operation.getAmount()*-1) {
+            operations.add(operation);
+            totalAmount += operation.getAmount();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public String toString() {
-        return "BankAccount => " +
-                "id = " + id +
-                ", balance = " + balance +
-                ", customer = " + customer +
-                ", operation = " + operation +
-                '.';
+        return "BankAccount{" +
+                "id=" + id +
+                ", customer=" + customer +
+                ", operations=" + operations +
+                ", totalAmount=" + totalAmount +
+                '}';
     }
 }

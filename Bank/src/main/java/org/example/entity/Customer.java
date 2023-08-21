@@ -39,6 +39,7 @@ public class Customer extends BankAccount{
     }
 
     public Customer(String firstName, String lastName, String phone) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;

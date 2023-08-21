@@ -30,7 +30,7 @@ public class Operation {
     public Operation(double amount, int accountId) {
         this.amount = amount;
         this.accountId = accountId;
-        this.status = (this.amount >= 0) ? OperationStatus.DEPOSIT : OperationStatus.WITHDRAWL;
+        this.status = (this.amount >= 0) ? OperationStatus.DEPOSIT : OperationStatus.WITHDRAWAL;
     }
 
     public Operation(int id, double amount, int accountId) {

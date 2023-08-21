@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BankAccount {
@@ -12,6 +13,10 @@ public class BankAccount {
     private List<Operation> operations;
 
     private double totalAmount;
+
+    public BankAccount() {
+
+    }
 
 
     public int getId() {
